@@ -77,7 +77,7 @@ async function update(producto) {
     return productos[indice];
 }
 
-async function destroy(id) {
+async function borrar(id) {
     if (!id) throw new Error("Error. El Id está indefinido.");
 
     let productos   = await leer();
@@ -92,4 +92,4 @@ async function destroy(id) {
     return producto;
 }
 
-module.exports = { findOneById, findAll, create, update, destroy };
+module.exports = { findOneById, findAll, create, update, borrar};

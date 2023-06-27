@@ -1,5 +1,5 @@
 const express = require("express");
-const { findOneById, findAll, create, update, destroy } = require("./database/data.manager.js");
+const { findOneById, findAll, create, update, borrar } = require("./database/data.manager.js");
 const dotenv = require('dotenv');
 
 
@@ -49,7 +49,7 @@ server.put('/productos/:id', (req, res) => {
 server.delete('/productos/:id', (req, res) => {
     const { id } = req.params;
 
-    destroy(Number(id))
+    borrar(Number(id))
         .then((producto) => res.status(200).send(producto))
         .catch((error) => res.status(400).send(error.message));
 });
