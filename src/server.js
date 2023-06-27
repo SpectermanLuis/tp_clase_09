@@ -1,8 +1,9 @@
 const express = require("express");
 const { findOneById, findAll, create, update, destroy } = require("./database/data.manager.js");
+const dotenv = require('dotenv');
 
-require('dotenv').config();
 
+dotenv.config();
 const server = express();
 
 // Middlewares
