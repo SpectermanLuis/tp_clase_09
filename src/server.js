@@ -10,14 +10,14 @@ const server = express();
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
-// Obtener todos los productos: Ruta GET http://127.0.0.1:3000/productos
+// Traer todos los productos
 server.get('/productos', (req, res) => {
     findAll()
         .then((productos) => res.status(200).send(productos))
         .catch((error) => res.status(400).send(error.message));
 });
 
-// Obtener un producto específico: Ruta GET http://127.0.0.1:3000/productos/1
+// Traer un producto determinado por id
 server.get('/productos/:id', (req, res) => {
     const { id } = req.params;
 
@@ -26,31 +26,31 @@ server.get('/productos/:id', (req, res) => {
         .catch((error) => res.status(400).send(error.message));
 });
 
-// Crear un nuevo producto: Ruta POST http://127.0.0.1:3000/productos
+// Crear un producto nuevo
 server.post('/productos', (req, res) => {
-    const { rubro, descripcion, precio, stock } = req.body;
+    const { rubro, descripcion, precio,stock } = req.body;
 
-    create({ rubro,descripcion,precio,stock })
-        .then((productos) => res.status(201).send(productos))
+    create({ rubro,descripcion,precio: Number(precio), stock: Number(stock) })
+        .then((producto) => res.status(201).send({status:'Alta ok',producto}))
         .catch((error) => res.status(400).send(error.message));
 });
 
-// Actualizar un producto específico: Ruta PUT http://127.0.0.1:3000/productos/1
+// Actualizar un producto existente
 server.put('/productos/:id', (req, res) => {
     const { id } = req.params;
     const { rubro,descripcion,precio,stock } = req.body;
 
-    update({ id: Number(id), rubro,descripcion,precio,stock })
-        .then((producto) => res.status(200).send(producto))
+    update({ id: Number(id), rubro,descripcion,precio: Number(precio), stock: Number(stock) })
+        .then((producto) => res.status(200).send({status:'Actualizacion ok',producto}))
         .catch((error) => res.status(400).send(error.message));
 });
 
-// Eliminar un producto  específico: Ruta DELETE http://127.0.0.1:3000/productos/1
+// Borrar un producto existente
 server.delete('/productos/:id', (req, res) => {
     const { id } = req.params;
 
     borrar(Number(id))
-        .then((producto) => res.status(200).send(producto))
+        .then((producto) => res.status(200).send({status:'Borrado ok',producto}))
         .catch((error) => res.status(400).send(error.message));
 });
 

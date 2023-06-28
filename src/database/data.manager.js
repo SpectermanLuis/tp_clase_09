@@ -1,11 +1,11 @@
 const fs   = require("fs");
 const path = require("path");
 
-const ruta = path.join(__dirname, "data.json");
+const ruta_json = path.join(__dirname, "data.json");
 
 function escribir(contenido) {
     return new Promise((resolve, reject) => {
-        fs.writeFile(ruta, JSON.stringify(contenido, null, "\t"), "utf8", (error) => {
+        fs.writeFile(ruta_json, JSON.stringify(contenido, null, "\t"), "utf8", (error) => {
             if (error) reject(new Error("Error. No se puede escribir"));
 
             resolve(true);
@@ -15,7 +15,7 @@ function escribir(contenido) {
 
 function leer() {
     return new Promise((resolve, reject) => {
-        fs.readFile(ruta, "utf8", (error, result) => {
+        fs.readFile(ruta_json, "utf8", (error, result) => {
             if (error) reject(new Error("Error. No se puede leer"));
 
             resolve(JSON.parse(result));
@@ -36,12 +36,12 @@ function generarId(productos) {
 }
 
 async function findOneById(id) {
-    if (!id) throw new Error("Error. El Id está indefinido.");
+    if (!id) throw new Error("Error. Ingresar Id valido.");
 
     const productos = await leer();
     const producto  = productos.find((element) => element.id === id);
 
-    if (!producto) throw new Error("Error. El Id no corresponde a un producto en existencia.");
+    if (!producto) throw new Error(`Error. El Id ${id} no corresponde a un producto existente.`);
 
     return producto;
 }
@@ -52,7 +52,7 @@ async function findAll() {
 }
 
 async function create(producto) {
-    if (!producto?.rubro || !producto?.descripcion || !producto?.precio || !producto?.stock ) throw new Error("Error. Datos incompletos.");
+    if (!producto?.rubro || !producto?.descripcion || !producto?.precio || !producto?.stock ) throw new Error("Error. Datos incompletos. Revisar");
 
     let productos = await leer();
     const productoConId = { id: generarId(productos), ...producto };
@@ -69,7 +69,7 @@ async function update(producto) {
     let productos   = await leer();
     const indice = productos.findIndex((element) => element.id === producto.id);
 
-    if (indice < 0) throw new Error("Error. El Id no corresponde a un producto en existencia.");
+    if (indice < 0) throw new Error(`Error. El Id ${id} no corresponde a un producto existente.`);
 
     productos[indice] = producto;
     await escribir(producto);
@@ -78,12 +78,12 @@ async function update(producto) {
 }
 
 async function borrar(id) {
-    if (!id) throw new Error("Error. El Id está indefinido.");
+    if (!id) throw new Error("Error. Necesita ingresar Id Valida.");
 
     let productos   = await leer();
     const indice = productos.findIndex((element) => element.id === id);
 
-    if (indice < 0) throw new Error("Error. El Id no corresponde a un producto en existencia.");
+    if (indice < 0) throw new Error(`Error. El Id ${id} no corresponde a un producto existente.`);
 
     const producto = productos[indice];
     productos.splice(indice, 1);
